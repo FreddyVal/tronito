@@ -1,0 +1,1 @@
+ALTER TABLE "config" ADD COLUMN "bloqueo_una_hora_activo" boolean DEFAULT false NOT NULL;
