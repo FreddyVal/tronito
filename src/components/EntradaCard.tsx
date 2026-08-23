@@ -26,14 +26,43 @@ interface Tema {
   badgeBg: string;
   badgeText: string;
   acento: string;
+  /** Animación de brillo tipo medalla — solo para el podio (#1, #2, #3). */
+  animacion?: string;
 }
 
 function temaDeRank(rank: number): Tema {
   if (rank === 1) {
-    return { bg: "#fdf6e3", border: "#e8c566", badgeBg: "#fef3c7", badgeText: "#c8860a", acento: "#c8860a" };
+    // Oro
+    return {
+      bg: "#fdf6e3",
+      border: "#e8c566",
+      badgeBg: "#fef3c7",
+      badgeText: "#c8860a",
+      acento: "#c8860a",
+      animacion: "brillo-dorado",
+    };
   }
   if (rank === 2) {
-    return { bg: "#f0f4fb", border: "#1a3a6b", badgeBg: "#1a3a6b", badgeText: "#ffffff", acento: "#1a3a6b" };
+    // Plata
+    return {
+      bg: "#f4f5f7",
+      border: "#b6bac2",
+      badgeBg: "#e5e7eb",
+      badgeText: "#6b7280",
+      acento: "#71767f",
+      animacion: "brillo-plateado",
+    };
+  }
+  if (rank === 3) {
+    // Bronce
+    return {
+      bg: "#fbeee1",
+      border: "#cd7f32",
+      badgeBg: "#f3dcc3",
+      badgeText: "#a15c2e",
+      acento: "#a15c2e",
+      animacion: "brillo-bronce",
+    };
   }
   return { bg: "#fafafa", border: "#d0d0d0", badgeBg: "#e0e0e0", badgeText: "#888888", acento: "#888888" };
 }
@@ -73,8 +102,12 @@ export function EntradaCard({ entrada, rank, tiempoLabel, destacado }: Props) {
 
   return (
     <div
-      className="relative overflow-hidden rounded-2xl p-5"
-      style={{ background: tema.bg, border: `2px solid ${tema.border}` }}
+      className={`relative overflow-hidden rounded-2xl p-5 ${tema.animacion ? "brillo-medalla" : ""}`}
+      style={{
+        background: tema.bg,
+        border: `2px solid ${tema.border}`,
+        animation: tema.animacion ? `${tema.animacion} 2.8s ease-in-out infinite` : undefined,
+      }}
     >
       <span
         aria-hidden

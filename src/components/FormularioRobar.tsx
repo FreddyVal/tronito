@@ -37,8 +37,8 @@ function IconoInstagram() {
 
 function IconoX() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
-      <path d="M4 4l16 16M20 4L4 20" />
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" aria-hidden>
+      <path d="M5 5l14 14M19 5L5 19" />
     </svg>
   );
 }
@@ -68,11 +68,27 @@ const ICONOS: Record<Plataforma, () => React.JSX.Element> = {
   externo: IconoLink,
 };
 
+function IconoTile({ plataforma, seleccionado }: { plataforma: Plataforma; seleccionado: boolean }) {
+  const Icono = ICONOS[plataforma];
+  return (
+    <span
+      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
+        seleccionado ? "bg-[#1a3a6b] text-white" : "bg-neutral-100 text-neutral-500"
+      }`}
+    >
+      <Icono />
+    </span>
+  );
+}
+
 export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, onCerrar }: Props) {
   const [paso, setPaso] = useState(1);
 
-  const [plataforma, setPlataforma] = useState<Plataforma | null>(null);
-  const [urlSinProtocolo, setUrlSinProtocolo] = useState("");
+  // El prefijo (instagram.com/, x.com/, etc.) es fijo y no editable — solo
+  // se guarda lo que el usuario escribe DESPUÉS del prefijo. Así, cambiar de
+  // plataforma solo reemplaza el prefijo y nunca borra lo ya escrito.
+  const [plataforma, setPlataforma] = useState<Plataforma>("externo");
+  const [rutaUsuario, setRutaUsuario] = useState("");
 
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
@@ -85,7 +101,8 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const url = urlSinProtocolo ? `https://${urlSinProtocolo}` : "";
+  const prefijo = PREFIJOS[plataforma];
+  const url = rutaUsuario ? `https://${prefijo}${rutaUsuario}` : "";
   const montoElegido = precioVigente + pasosExtra * PASO_OFERTA;
 
   function urlValida(): boolean {
@@ -95,17 +112,6 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
     } catch {
       return false;
     }
-  }
-
-  function elegirPlataforma(p: Plataforma) {
-    setUrlSinProtocolo((actual) => {
-      // Solo pisa la URL si está vacía o si todavía es el prefijo autocompletado
-      // de la plataforma anterior sin editar — si el usuario ya escribió algo
-      // encima, se respeta lo que escribió aunque cambie de botón.
-      const eraAutocompletado = plataforma !== null && actual === PREFIJOS[plataforma];
-      return actual === "" || eraAutocompletado ? PREFIJOS[p] : actual;
-    });
-    setPlataforma(p);
   }
 
   async function publicar() {
@@ -181,23 +187,20 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                       ["youtube", "YouTube"],
                       ["externo", "Link externo"],
                     ] as [Plataforma, string][]
-                  ).map(([valor, etiqueta]) => {
-                    const Icono = ICONOS[valor];
-                    return (
-                      <button
-                        key={valor}
-                        onClick={() => elegirPlataforma(valor)}
-                        className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium ${
-                          plataforma === valor
-                            ? "border-[#1a3a6b] bg-[#f0f4fb] text-[#1a3a6b]"
-                            : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"
-                        }`}
-                      >
-                        <Icono />
-                        {etiqueta}
-                      </button>
-                    );
-                  })}
+                  ).map(([valor, etiqueta]) => (
+                    <button
+                      key={valor}
+                      onClick={() => setPlataforma(valor)}
+                      className={`flex items-center gap-2 rounded-xl border px-3 py-3 text-sm font-medium ${
+                        plataforma === valor
+                          ? "border-[#1a3a6b] bg-[#f0f4fb] text-[#1a3a6b]"
+                          : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"
+                      }`}
+                    >
+                      <IconoTile plataforma={valor} seleccionado={plataforma === valor} />
+                      {etiqueta}
+                    </button>
+                  ))}
                 </div>
 
                 <div>
@@ -205,13 +208,15 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                     URL de destino
                   </label>
                   <div className="mt-1 flex items-center rounded-lg border border-neutral-300 px-3 py-2 text-sm focus-within:border-[#1a3a6b] focus-within:ring-1 focus-within:ring-[#1a3a6b]">
-                    <span className="text-neutral-400">https://</span>
+                    <span className="shrink-0 text-neutral-400 select-none">
+                      https://{prefijo}
+                    </span>
                     <input
                       autoFocus
-                      value={urlSinProtocolo}
-                      onChange={(e) => setUrlSinProtocolo(e.target.value.replace(/^https?:\/\//, ""))}
-                      className="ml-0.5 flex-1 outline-none"
-                      placeholder="tunegocio.cl/tu-pagina"
+                      value={rutaUsuario}
+                      onChange={(e) => setRutaUsuario(e.target.value.replace(/^https?:\/\//, ""))}
+                      className="ml-0.5 min-w-0 flex-1 outline-none"
+                      placeholder={plataforma === "externo" ? "tunegocio.cl/tu-pagina" : "tu-usuario"}
                     />
                   </div>
                 </div>

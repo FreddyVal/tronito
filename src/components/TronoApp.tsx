@@ -182,7 +182,14 @@ export function TronoApp({ initialEstado }: { initialEstado: EstadoTrono }) {
         </>
       )}
 
-      <h2 className="sr-only">Salón de la fama</h2>
+      <div className="mb-4 w-full max-w-[512px] text-center">
+        <h2 className="text-lg font-bold text-neutral-900">Salón de la fama</h2>
+        <p className="mt-1 text-sm text-neutral-500">
+          Acá aparecen los que más han pagado por el #1, ordenados de mayor a menor — esos montos
+          quedan fijos para siempre. El precio para robar el #1 es otra cosa: parte alto recién
+          pagado y va bajando solo si nadie lo compra de nuevo.
+        </p>
+      </div>
       <div className="w-full max-w-[512px]">
         <SalonDeLaFama entradas={estado.salonDeLaFama} reyActualId={estado.reyActual?.id ?? null} />
       </div>
