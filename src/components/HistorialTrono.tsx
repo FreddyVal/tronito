@@ -15,7 +15,7 @@ interface Props {
   reyActualId: string | null;
 }
 
-export function SalonDeLaFama({ entradas, reyActualId }: Props) {
+export function HistorialTrono({ entradas, reyActualId }: Props) {
   // El "hace X" se recalcula cada minuto para que no quede pegado.
   const [ahora, setAhora] = useState(() => new Date());
   useEffect(() => {

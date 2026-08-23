@@ -35,7 +35,14 @@ export interface EstadoTrono {
    * cliente pueda animar el decaimiento localmente sin exponer contenido
    * moderado. */
   ultimaCompraBase: { monto: number; timestamp: string } | null;
-  salonDeLaFama: ThroneEntryDTO[];
+  /** El "Salón de la fama": la entrada con el monto pagado más alto de toda
+   * la historia (récord). Se recalcula en cada lectura — si alguien paga más
+   * que el récord actual, pasa a ser la nueva. */
+  recordHistorico: ThroneEntryDTO | null;
+  /** Historial de tomas del #1, ordenado por fecha (más reciente primero).
+   * El precio del #1 sube y baja con el tiempo, así que este orden NO es por
+   * monto pagado — puede coincidir con recordHistorico o no. */
+  historial: ThroneEntryDTO[];
   ahora: string;
 }
 
@@ -67,11 +74,19 @@ export async function getEstadoTrono(): Promise<EstadoTrono> {
 
   const reyActual = ultimaFila && !ultimaFila.oculto ? toDTO(ultimaFila) : null;
 
-  const salonDeLaFamaRows = await db
+  const recordHistoricoRows = await db
     .select()
     .from(throneHistory)
     .where(eq(throneHistory.oculto, false))
-    .orderBy(desc(throneHistory.montoPagado));
+    .orderBy(desc(throneHistory.montoPagado))
+    .limit(1);
+  const recordHistorico = recordHistoricoRows[0] ? toDTO(recordHistoricoRows[0]) : null;
+
+  const historialRows = await db
+    .select()
+    .from(throneHistory)
+    .where(eq(throneHistory.oculto, false))
+    .orderBy(desc(throneHistory.paidAt));
 
   const ahora = new Date();
   const precioVigente = calcularPrecioVigente(
@@ -98,7 +113,8 @@ export async function getEstadoTrono(): Promise<EstadoTrono> {
     ultimaCompraBase: ultimaFila
       ? { monto: ultimaFila.montoPagado, timestamp: ultimaFila.paidAt.toISOString() }
       : null,
-    salonDeLaFama: salonDeLaFamaRows.map(toDTO),
+    recordHistorico,
+    historial: historialRows.map(toDTO),
     ahora: ahora.toISOString(),
   };
 }
