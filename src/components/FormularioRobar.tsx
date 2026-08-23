@@ -25,6 +25,49 @@ const PREFIJOS: Record<Plataforma, string> = {
 const PASO_OFERTA = 1000;
 const TOTAL_PASOS = 3;
 
+function IconoInstagram() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function IconoX() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+      <path d="M4 4l16 16M20 4L4 20" />
+    </svg>
+  );
+}
+
+function IconoYoutube() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" aria-hidden>
+      <rect x="2.5" y="5.5" width="19" height="13" rx="4" />
+      <path d="M10.5 9.5l5 2.5-5 2.5z" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function IconoLink() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.5" />
+      <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L12.5 19.5" />
+    </svg>
+  );
+}
+
+const ICONOS: Record<Plataforma, () => React.JSX.Element> = {
+  instagram: IconoInstagram,
+  x: IconoX,
+  youtube: IconoYoutube,
+  externo: IconoLink,
+};
+
 export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, onCerrar }: Props) {
   const [paso, setPaso] = useState(1);
 
@@ -55,8 +98,14 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
   }
 
   function elegirPlataforma(p: Plataforma) {
+    setUrlSinProtocolo((actual) => {
+      // Solo pisa la URL si está vacía o si todavía es el prefijo autocompletado
+      // de la plataforma anterior sin editar — si el usuario ya escribió algo
+      // encima, se respeta lo que escribió aunque cambie de botón.
+      const eraAutocompletado = plataforma !== null && actual === PREFIJOS[plataforma];
+      return actual === "" || eraAutocompletado ? PREFIJOS[p] : actual;
+    });
     setPlataforma(p);
-    if (!urlSinProtocolo) setUrlSinProtocolo(PREFIJOS[p]);
   }
 
   async function publicar() {
@@ -120,8 +169,8 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
             {paso === 1 && (
               <div className="space-y-4">
                 <div>
-                  <p className="font-semibold text-neutral-900">¿A dónde los mandás?</p>
-                  <p className="text-sm text-neutral-500">El que toque tu Tronito cae acá.</p>
+                  <p className="font-semibold text-neutral-900">¿A dónde los mandas?</p>
+                  <p className="text-sm text-neutral-500">El que toque tu Tronito cae aquí al tiro.</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
@@ -132,19 +181,23 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                       ["youtube", "YouTube"],
                       ["externo", "Link externo"],
                     ] as [Plataforma, string][]
-                  ).map(([valor, etiqueta]) => (
-                    <button
-                      key={valor}
-                      onClick={() => elegirPlataforma(valor)}
-                      className={`rounded-xl border px-4 py-3 text-sm font-medium ${
-                        plataforma === valor
-                          ? "border-[#1a3a6b] bg-[#f0f4fb] text-[#1a3a6b]"
-                          : "border-neutral-200 hover:bg-neutral-50"
-                      }`}
-                    >
-                      {etiqueta}
-                    </button>
-                  ))}
+                  ).map(([valor, etiqueta]) => {
+                    const Icono = ICONOS[valor];
+                    return (
+                      <button
+                        key={valor}
+                        onClick={() => elegirPlataforma(valor)}
+                        className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium ${
+                          plataforma === valor
+                            ? "border-[#1a3a6b] bg-[#f0f4fb] text-[#1a3a6b]"
+                            : "border-neutral-200 text-neutral-700 hover:bg-neutral-50"
+                        }`}
+                      >
+                        <Icono />
+                        {etiqueta}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 <div>
@@ -158,7 +211,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                       value={urlSinProtocolo}
                       onChange={(e) => setUrlSinProtocolo(e.target.value.replace(/^https?:\/\//, ""))}
                       className="ml-0.5 flex-1 outline-none"
-                      placeholder="tuenlace.com/tu-pagina"
+                      placeholder="tunegocio.cl/tu-pagina"
                     />
                   </div>
                 </div>
@@ -176,8 +229,8 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
             {paso === 2 && (
               <div className="space-y-4">
                 <div>
-                  <p className="font-semibold text-neutral-900">¿Qué querés que diga?</p>
-                  <p className="text-sm text-neutral-500">Un título y una línea.</p>
+                  <p className="font-semibold text-neutral-900">¿Qué quieres que diga?</p>
+                  <p className="text-sm text-neutral-500">Un título y una línea, cortito y al pique.</p>
                 </div>
 
                 <div>
@@ -229,7 +282,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                   disabled={!titulo.trim() || !descripcion.trim()}
                   className="w-full rounded-full bg-[#1a3a6b] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-40"
                 >
-                  Mostrame cómo queda
+                  Muéstrame cómo queda
                 </button>
               </div>
             )}
@@ -238,7 +291,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
               <div className="space-y-4">
                 <div>
                   <p className="font-semibold text-neutral-900">Este es tu Tronito</p>
-                  <p className="text-sm text-neutral-500">Así te va a ver la gente en el #1.</p>
+                  <p className="text-sm text-neutral-500">Así te va a ver la gente al tiro en el #1.</p>
                 </div>
 
                 <EntradaCard
