@@ -1,5 +1,10 @@
 import { defineConfig } from "drizzle-kit";
-import "dotenv/config";
+import { config } from "dotenv";
+
+// Next.js carga .env.local automáticamente, pero drizzle-kit corre fuera de
+// Next y "dotenv/config" por defecto solo lee ".env" — hay que apuntarlo
+// explícitamente a .env.local (que es donde vive el secreto real, gitignoreado).
+config({ path: ".env.local" });
 
 // DATABASE_URL solo hace falta para "migrate"/"studio" (comandos que se
 // conectan de verdad). "generate" solo lee schema.ts, así que no bloqueamos

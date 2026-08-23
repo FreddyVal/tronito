@@ -4,12 +4,12 @@ import { useState, type FormEvent } from "react";
 import { formatCLP } from "@/lib/format";
 
 interface Props {
-  precioVigente: number;
+  montoElegido: number;
   subastaPausada: boolean;
   onCerrar: () => void;
 }
 
-export function FormularioRobar({ precioVigente, subastaPausada, onCerrar }: Props) {
+export function FormularioRobar({ montoElegido, subastaPausada, onCerrar }: Props) {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [url, setUrl] = useState("");
@@ -25,7 +25,13 @@ export function FormularioRobar({ precioVigente, subastaPausada, onCerrar }: Pro
       const res = await fetch("/api/robar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ titulo, descripcion, url, imagenUrl: imagenUrl || undefined }),
+        body: JSON.stringify({
+          titulo,
+          descripcion,
+          url,
+          imagenUrl: imagenUrl || undefined,
+          montoElegido,
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -61,9 +67,8 @@ export function FormularioRobar({ precioVigente, subastaPausada, onCerrar }: Pro
         ) : (
           <form onSubmit={onSubmit} className="space-y-3">
             <p className="text-sm text-neutral-600">
-              Precio vigente en este momento:{" "}
-              <span className="font-semibold text-neutral-900">{formatCLP(precioVigente)}</span>.
-              El precio real se confirma al pagar, puede haber cambiado.
+              Tu oferta: <span className="font-semibold text-neutral-900">{formatCLP(montoElegido)}</span>.
+              Si el precio subió mientras completabas esto, te avisamos antes de cobrarte.
             </p>
 
             <div>
@@ -125,7 +130,7 @@ export function FormularioRobar({ precioVigente, subastaPausada, onCerrar }: Pro
               disabled={enviando}
               className="w-full rounded-lg bg-neutral-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-neutral-700 disabled:opacity-50"
             >
-              {enviando ? "Redirigiendo a MercadoPago…" : `Pagar ${formatCLP(precioVigente)} y robar el #1`}
+              {enviando ? "Redirigiendo a MercadoPago…" : `Pagar ${formatCLP(montoElegido)} y robar el #1`}
             </button>
 
             <p className="text-center text-xs text-neutral-400">

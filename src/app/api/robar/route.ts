@@ -14,6 +14,9 @@ const bodySchema = z.object({
   descripcion: z.string().trim().min(1).max(500),
   url: z.string().trim().url().max(2000),
   imagenUrl: z.string().trim().url().max(2000).optional().or(z.literal("")),
+  // Sobre-oferta opcional elegida en el stepper del front (+/- $1.000 sobre el
+  // mínimo). Si no viene, se cobra exactamente el precio vigente.
+  montoElegido: z.number().int().min(1).max(100_000_000).optional(),
 });
 
 export async function POST(request: Request) {
@@ -50,12 +53,24 @@ export async function POST(request: Request) {
     );
   }
 
-  const { titulo, descripcion, url, imagenUrl } = parsed.data;
+  const { titulo, descripcion, url, imagenUrl, montoElegido } = parsed.data;
+
+  if (montoElegido !== undefined && montoElegido < estado.precioVigente) {
+    return NextResponse.json(
+      {
+        error: "El precio subió mientras completabas el formulario. Actualiza e intenta de nuevo.",
+        precioVigente: estado.precioVigente,
+      },
+      { status: 409 },
+    );
+  }
+
+  const precio = montoElegido ?? estado.precioVigente;
 
   const inserted = await db
     .insert(purchaseIntents)
     .values({
-      expectedPrice: estado.precioVigente,
+      expectedPrice: precio,
       titulo,
       descripcion,
       url,
@@ -72,7 +87,7 @@ export async function POST(request: Request) {
   try {
     const preferencia = await crearPreferencia({
       intentId: intent.id,
-      precio: estado.precioVigente,
+      precio,
       titulo,
     });
 
@@ -89,7 +104,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "MercadoPago no devolvió un link de pago" }, { status: 502 });
     }
 
-    return NextResponse.json({ initPoint, precio: estado.precioVigente, intentId: intent.id });
+    return NextResponse.json({ initPoint, precio, intentId: intent.id });
   } catch (err) {
     console.error("Error creando preferencia de MercadoPago", err);
     return NextResponse.json({ error: "No se pudo iniciar el pago" }, { status: 502 });
