@@ -92,7 +92,7 @@ export function EstadoPago({ intentId }: { intentId: string | null }) {
           <p className="text-sm text-neutral-500">Puedes intentar robar el #1 de nuevo.</p>
         </>
       )}
-      <Link href="/" className="mt-2 rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-neutral-700">
+      <Link href="/" className="mt-2 rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
         Volver a Tronito
       </Link>
     </div>

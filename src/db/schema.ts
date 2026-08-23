@@ -47,6 +47,7 @@ export const throneHistory = pgTable(
 
     titulo: varchar("titulo", { length: 120 }).notNull(),
     descripcion: varchar("descripcion", { length: 500 }).notNull(),
+    textoBoton: varchar("texto_boton", { length: 30 }).notNull().default("Ver más"),
     url: text("url").notNull(),
     imagenUrl: text("imagen_url"),
 
@@ -73,6 +74,7 @@ export const purchaseIntents = pgTable("purchase_intents", {
   expectedPrice: integer("expected_price").notNull(),
   titulo: varchar("titulo", { length: 120 }).notNull(),
   descripcion: varchar("descripcion", { length: 500 }).notNull(),
+  textoBoton: varchar("texto_boton", { length: 30 }).notNull().default("Ver más"),
   url: text("url").notNull(),
   imagenUrl: text("imagen_url"),
 

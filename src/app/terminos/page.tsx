@@ -155,7 +155,10 @@ export default function TerminosPage() {
         <Seccion titulo="12. Contacto">
           <p>
             ¿Tuviste un problema o tienes una consulta? Escríbenos a{" "}
-            <a href="mailto:f.valdebenito.alarcon@gmail.com" className="underline">
+            <a
+              href="mailto:f.valdebenito.alarcon@gmail.com"
+              className="text-blue-600 underline hover:text-blue-800"
+            >
               f.valdebenito.alarcon@gmail.com
             </a>
             .

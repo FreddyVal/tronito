@@ -1,0 +1,2 @@
+ALTER TABLE "purchase_intents" ADD COLUMN "texto_boton" varchar(30) DEFAULT 'Ver más' NOT NULL;--> statement-breakpoint
+ALTER TABLE "throne_history" ADD COLUMN "texto_boton" varchar(30) DEFAULT 'Ver más' NOT NULL;

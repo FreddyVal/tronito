@@ -90,7 +90,7 @@ export function TronoApp({ initialEstado }: { initialEstado: EstadoTrono }) {
         ) : estado.bloqueado ? (
           <>
             <p className="text-sm text-neutral-500">Roba el #1 por</p>
-            <p className="my-2 text-5xl font-black tracking-tight text-neutral-900">
+            <p className="my-2 text-5xl font-black tracking-tight text-blue-700">
               {formatCLP(precioLocal)}
             </p>
             <p className="mt-2 text-sm font-medium text-neutral-500">
@@ -105,23 +105,25 @@ export function TronoApp({ initialEstado }: { initialEstado: EstadoTrono }) {
           </>
         ) : (
           <>
-            <p className="text-sm text-neutral-500">¿Cuánto pagarías por estar en el #1?</p>
+            <p className="text-sm text-neutral-500">
+              ¿Cuánto pagarías por estar en el puesto #1 cuando esta página se haga viral?
+            </p>
             <div className="my-3 flex items-center justify-center gap-4">
               <button
                 onClick={() => setPasosExtra((p) => Math.max(0, p - 1))}
                 disabled={pasosExtra === 0}
                 aria-label={`Bajar oferta en ${formatCLP(PASO_OFERTA)}`}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-lg font-bold text-neutral-600 hover:bg-neutral-100 disabled:opacity-30"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-blue-200 text-lg font-bold text-blue-600 hover:bg-blue-50 disabled:opacity-30"
               >
                 −
               </button>
-              <p className="text-4xl font-black tracking-tight text-neutral-900 sm:text-5xl">
+              <p className="text-4xl font-black tracking-tight text-blue-700 sm:text-5xl">
                 {formatCLP(montoElegido)}
               </p>
               <button
                 onClick={() => setPasosExtra((p) => p + 1)}
                 aria-label={`Subir oferta en ${formatCLP(PASO_OFERTA)}`}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-300 text-lg font-bold text-neutral-600 hover:bg-neutral-100"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-blue-200 text-lg font-bold text-blue-600 hover:bg-blue-50"
               >
                 +
               </button>
@@ -133,7 +135,7 @@ export function TronoApp({ initialEstado }: { initialEstado: EstadoTrono }) {
             )}
             <button
               onClick={() => setMostrarFormulario(true)}
-              className="mt-4 w-full rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-700"
+              className="mt-4 w-full rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700"
             >
               Llévate el puesto #1 por {formatCLP(montoElegido)}
             </button>
@@ -154,7 +156,8 @@ export function TronoApp({ initialEstado }: { initialEstado: EstadoTrono }) {
 
       {mostrarFormulario && (
         <FormularioRobar
-          montoElegido={montoElegido}
+          precioVigente={precioLocal}
+          montoInicial={montoElegido}
           subastaPausada={estado.subastaPausada}
           onCerrar={() => setMostrarFormulario(false)}
         />

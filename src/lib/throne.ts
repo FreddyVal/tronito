@@ -12,6 +12,7 @@ export interface ThroneEntryDTO {
   id: string;
   titulo: string;
   descripcion: string;
+  textoBoton: string;
   url: string;
   imagenUrl: string | null;
   montoPagado: number;
@@ -43,6 +44,7 @@ function toDTO(row: ThroneRow): ThroneEntryDTO {
     id: row.id,
     titulo: row.titulo,
     descripcion: row.descripcion,
+    textoBoton: row.textoBoton,
     url: row.url,
     imagenUrl: row.imagenUrl,
     montoPagado: row.montoPagado,

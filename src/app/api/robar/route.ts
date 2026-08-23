@@ -12,6 +12,7 @@ export const runtime = "nodejs";
 const bodySchema = z.object({
   titulo: z.string().trim().min(1).max(120),
   descripcion: z.string().trim().min(1).max(500),
+  textoBoton: z.string().trim().min(1).max(30).optional(),
   url: z.string().trim().url().max(2000),
   imagenUrl: z.string().trim().url().max(2000).optional().or(z.literal("")),
   // Sobre-oferta opcional elegida en el stepper del front (+/- $1.000 sobre el
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { titulo, descripcion, url, imagenUrl, montoElegido } = parsed.data;
+  const { titulo, descripcion, textoBoton, url, imagenUrl, montoElegido } = parsed.data;
 
   if (montoElegido !== undefined && montoElegido < estado.precioVigente) {
     return NextResponse.json(
@@ -73,6 +74,7 @@ export async function POST(request: Request) {
       expectedPrice: precio,
       titulo,
       descripcion,
+      textoBoton: textoBoton || undefined,
       url,
       imagenUrl: imagenUrl || null,
       status: "pending",

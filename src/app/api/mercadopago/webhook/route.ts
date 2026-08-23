@@ -116,6 +116,7 @@ export async function POST(request: Request) {
       await tx.insert(throneHistory).values({
         titulo: intent.titulo,
         descripcion: intent.descripcion,
+        textoBoton: intent.textoBoton,
         url: intent.url,
         imagenUrl: intent.imagenUrl,
         montoPagado: intent.expectedPrice,

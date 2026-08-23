@@ -15,6 +15,13 @@
       "when": 1787427205045,
       "tag": "0001_overconfident_mongu",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1787447590151,
+      "tag": "0002_slippery_reaper",
+      "breakpoints": true
     }
   ]
 }
