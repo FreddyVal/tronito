@@ -102,7 +102,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
               <span
                 key={i}
                 className={`h-1.5 w-6 rounded-full ${
-                  i + 1 <= paso ? "bg-blue-600" : "bg-neutral-200"
+                  i + 1 <= paso ? "bg-[#1a3a6b]" : "bg-neutral-200"
                 }`}
               />
             ))}
@@ -138,7 +138,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                       onClick={() => elegirPlataforma(valor)}
                       className={`rounded-xl border px-4 py-3 text-sm font-medium ${
                         plataforma === valor
-                          ? "border-blue-600 bg-blue-50 text-blue-700"
+                          ? "border-[#1a3a6b] bg-[#f0f4fb] text-[#1a3a6b]"
                           : "border-neutral-200 hover:bg-neutral-50"
                       }`}
                     >
@@ -151,7 +151,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                   <label className="block text-sm font-medium text-neutral-700">
                     URL de destino
                   </label>
-                  <div className="mt-1 flex items-center rounded-lg border border-neutral-300 px-3 py-2 text-sm focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+                  <div className="mt-1 flex items-center rounded-lg border border-neutral-300 px-3 py-2 text-sm focus-within:border-[#1a3a6b] focus-within:ring-1 focus-within:ring-[#1a3a6b]">
                     <span className="text-neutral-400">https://</span>
                     <input
                       autoFocus
@@ -166,7 +166,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                 <button
                   onClick={() => setPaso(2)}
                   disabled={!urlValida()}
-                  className="w-full rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-40"
+                  className="w-full rounded-full bg-[#1a3a6b] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-40"
                 >
                   Listo, sigamos
                 </button>
@@ -190,7 +190,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                     maxLength={120}
                     value={titulo}
                     onChange={(e) => setTitulo(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-[#1a3a6b] focus:outline-none focus:ring-1 focus:ring-[#1a3a6b]"
                     placeholder="Mi anuncio"
                   />
                 </div>
@@ -204,7 +204,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                     maxLength={500}
                     value={descripcion}
                     onChange={(e) => setDescripcion(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-[#1a3a6b] focus:outline-none focus:ring-1 focus:ring-[#1a3a6b]"
                     rows={3}
                     placeholder="De qué se trata"
                   />
@@ -219,7 +219,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                     maxLength={30}
                     value={textoBoton}
                     onChange={(e) => setTextoBoton(e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-[#1a3a6b] focus:outline-none focus:ring-1 focus:ring-[#1a3a6b]"
                     placeholder="Ver más"
                   />
                 </div>
@@ -227,7 +227,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                 <button
                   onClick={() => setPaso(3)}
                   disabled={!titulo.trim() || !descripcion.trim()}
-                  className="w-full rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-40"
+                  className="w-full rounded-full bg-[#1a3a6b] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-40"
                 >
                   Mostrame cómo queda
                 </button>
@@ -252,7 +252,7 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                   }}
                   rank={1}
                   destacado
-                  tiempoLabel="en el #1 recién"
+                  tiempoLabel="recién"
                 />
 
                 <div className="rounded-xl border border-neutral-200 p-4">
@@ -265,17 +265,17 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                       onClick={() => setPasosExtra((p) => Math.max(0, p - 1))}
                       disabled={pasosExtra === 0}
                       aria-label="Bajar oferta"
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-blue-200 text-lg font-bold text-blue-600 hover:bg-blue-50 disabled:opacity-30"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg font-bold text-neutral-900 hover:opacity-50 disabled:opacity-20"
                     >
                       −
                     </button>
-                    <p className="text-2xl font-black tracking-tight text-blue-700">
+                    <p className="text-2xl font-black tracking-tight text-neutral-900">
                       {formatCLP(montoElegido)}
                     </p>
                     <button
                       onClick={() => setPasosExtra((p) => p + 1)}
                       aria-label="Subir oferta"
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-blue-200 text-lg font-bold text-blue-600 hover:bg-blue-50"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg font-bold text-neutral-900 hover:opacity-50"
                     >
                       +
                     </button>
@@ -287,14 +287,14 @@ export function FormularioRobar({ precioVigente, montoInicial, subastaPausada, o
                 <button
                   onClick={publicar}
                   disabled={enviando}
-                  className="w-full rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+                  className="w-full rounded-full bg-[#1a3a6b] px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50"
                 >
                   {enviando ? "Redirigiendo a MercadoPago…" : `Publicar mi Tronito por ${formatCLP(montoElegido)}`}
                 </button>
 
                 <p className="text-center text-xs text-neutral-400">
                   Al pagar aceptas los{" "}
-                  <a href="/terminos" target="_blank" className="text-blue-600 underline hover:text-blue-800">
+                  <a href="/terminos" target="_blank" className="text-[#2a5fc4] underline hover:opacity-70">
                     términos y condiciones
                   </a>
                   . Pago no reembolsable.

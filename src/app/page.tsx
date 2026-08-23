@@ -12,8 +12,8 @@ export default async function Home() {
   return (
     <div className="flex min-h-full flex-1 flex-col">
       <SandboxBanner />
-      <Header />
-      <main className="flex-1">
+      <main className="flex flex-1 flex-col items-center px-4 py-10">
+        <Header />
         <TronoApp initialEstado={estado} />
       </main>
       <Footer />

@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import type { ThroneEntryDTO } from "@/lib/throne";
 import { tiempoDesde } from "@/lib/format";
-import { EntradaCard } from "./EntradaCard";
+import { EntradaCard, CardFantasma } from "./EntradaCard";
+
+const MIN_PUESTOS_MOSTRADOS = 3;
 
 interface Props {
   entradas: ThroneEntryDTO[];
@@ -21,30 +23,28 @@ export function SalonDeLaFama({ entradas, reyActualId }: Props) {
     return () => clearInterval(id);
   }, []);
 
-  if (entradas.length === 0) {
-    return (
-      <p className="text-center text-sm text-neutral-500">
-        Todavía nadie ha tomado el trono. Sé el primero.
-      </p>
-    );
-  }
+  const puestosFantasma = Math.max(0, MIN_PUESTOS_MOSTRADOS - entradas.length);
 
   return (
-    <ol className="space-y-3">
+    <ol className="flex flex-col gap-4">
       {entradas.map((entrada, i) => {
         const esReyActual = entrada.id === reyActualId;
-        const tiempo = tiempoDesde(new Date(entrada.paidAt), ahora);
         return (
           <li key={entrada.id}>
             <EntradaCard
               entrada={entrada}
               rank={i + 1}
               destacado={esReyActual}
-              tiempoLabel={esReyActual ? `en el #1 ${tiempo}` : tiempo}
+              tiempoLabel={tiempoDesde(new Date(entrada.paidAt), ahora)}
             />
           </li>
         );
       })}
+      {Array.from({ length: puestosFantasma }).map((_, i) => (
+        <li key={`fantasma-${i}`}>
+          <CardFantasma rank={entradas.length + i + 1} />
+        </li>
+      ))}
     </ol>
   );
 }

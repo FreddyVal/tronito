@@ -1,12 +1,12 @@
 export function Footer() {
   return (
-    <footer className="mx-auto w-[92%] max-w-[900px] border-t border-neutral-200 py-10 text-[13px] text-neutral-500">
-      <strong className="text-neutral-700">Tronito.</strong>
+    <footer className="mx-auto mt-10 w-[92%] max-w-[512px] border-t border-neutral-300/60 py-8 text-center text-[0.72rem] text-neutral-400">
+      <p>tronito. · El ranking que premia la viralidad</p>
       <p className="mt-2">
-        Los puestos cambian según las ofertas realizadas por los participantes. Es un experimento
-        de subasta de publicidad — no revisamos ni recomendamos lo publicado.
+        Los puestos cambian según las ofertas realizadas por los participantes. No revisamos ni
+        recomendamos lo publicado.
       </p>
-      <a href="/terminos" className="mt-2 inline-block text-blue-600 underline hover:text-blue-800">
+      <a href="/terminos" className="mt-2 inline-block text-[#2a5fc4] underline hover:opacity-70">
         Términos y condiciones
       </a>
     </footer>

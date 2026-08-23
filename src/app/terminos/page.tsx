@@ -157,7 +157,7 @@ export default function TerminosPage() {
             ¿Tuviste un problema o tienes una consulta? Escríbenos a{" "}
             <a
               href="mailto:f.valdebenito.alarcon@gmail.com"
-              className="text-blue-600 underline hover:text-blue-800"
+              className="text-[#2a5fc4] underline hover:opacity-70"
             >
               f.valdebenito.alarcon@gmail.com
             </a>
