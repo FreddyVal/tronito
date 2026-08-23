@@ -74,9 +74,9 @@ export function TronoApp({ initialEstado }: { initialEstado: EstadoTrono }) {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8 p-4 py-10">
+    <div className="mx-auto w-[92%] max-w-[900px] py-16">
       {destronadoVisible && (
-        <div className="flex items-center justify-between gap-4 rounded-xl bg-amber-50 p-4 text-sm text-amber-900">
+        <div className="mb-8 flex items-center justify-between gap-4 rounded-xl bg-amber-50 p-4 text-sm text-amber-900">
           <span>Te bajaron del #1. Recupera el trono desde {formatCLP(precioLocal)}.</span>
           <button onClick={cerrarBannerDestronado} className="shrink-0 underline">
             Entendido
@@ -84,17 +84,19 @@ export function TronoApp({ initialEstado }: { initialEstado: EstadoTrono }) {
         </div>
       )}
 
-      <section className="rounded-2xl border border-neutral-200 bg-white p-6 text-center shadow-sm">
+      <section className="pb-16 text-center">
         {estado.subastaPausada ? (
           <p className="text-lg font-semibold text-amber-700">La subasta está pausada.</p>
         ) : estado.bloqueado ? (
           <>
-            <p className="text-sm text-neutral-500">Roba el #1 por</p>
-            <p className="my-2 text-5xl font-black tracking-tight text-blue-700">
+            <h1 className="mx-auto mb-8 max-w-2xl text-[clamp(2rem,6vw,3.5rem)] leading-[1.05] font-bold tracking-tighter text-neutral-900">
+              El trono está bloqueado por el momento
+            </h1>
+            <p className="text-5xl font-black tracking-tight text-blue-700">
               {formatCLP(precioLocal)}
             </p>
-            <p className="mt-2 text-sm font-medium text-neutral-500">
-              El trono está bloqueado. Nadie puede robarlo hasta las{" "}
+            <p className="mt-4 text-sm font-medium text-neutral-500">
+              Nadie puede robarlo hasta las{" "}
               {estado.bloqueadoHasta &&
                 new Date(estado.bloqueadoHasta).toLocaleTimeString("es-CL", {
                   hour: "2-digit",
@@ -105,48 +107,62 @@ export function TronoApp({ initialEstado }: { initialEstado: EstadoTrono }) {
           </>
         ) : (
           <>
-            <p className="text-sm text-neutral-500">
-              ¿Cuánto pagarías por estar en el puesto #1 cuando esta página se haga viral?
-            </p>
-            <div className="my-3 flex items-center justify-center gap-4">
+            <h1 className="mx-auto mb-11 max-w-2xl text-[clamp(2rem,6vw,4rem)] leading-[1.05] font-bold tracking-tighter text-neutral-900">
+              ¿Cuánto pagarías por aparecer primero en esta página?
+            </h1>
+
+            <div className="mx-auto max-w-[480px] rounded-[18px] bg-white p-6 shadow-[0_4px_25px_rgba(0,0,0,0.06)]">
+              <p className="mb-4 text-left text-sm text-neutral-500">Tu oferta</p>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setPasosExtra((p) => Math.max(0, p - 1))}
+                  disabled={pasosExtra === 0}
+                  aria-label={`Bajar oferta en ${formatCLP(PASO_OFERTA)}`}
+                  className="h-12 w-12 shrink-0 rounded-xl border border-neutral-200 text-xl font-medium text-blue-600 hover:bg-blue-50 disabled:opacity-30"
+                >
+                  −
+                </button>
+                <div className="flex h-12 flex-1 items-center justify-center rounded-xl border border-neutral-200 px-3 text-xl font-bold text-blue-700">
+                  {formatCLP(montoElegido)}
+                </div>
+                <button
+                  onClick={() => setPasosExtra((p) => p + 1)}
+                  aria-label={`Subir oferta en ${formatCLP(PASO_OFERTA)}`}
+                  className="h-12 w-12 shrink-0 rounded-xl border border-neutral-200 text-xl font-medium text-blue-600 hover:bg-blue-50"
+                >
+                  +
+                </button>
+              </div>
+
+              {pasosExtra > 0 && (
+                <p className="mt-2 text-left text-xs text-neutral-400">
+                  {formatCLP(precioLocal)} mínimo + {formatCLP(pasosExtra * PASO_OFERTA)} de colchón
+                </p>
+              )}
+
               <button
-                onClick={() => setPasosExtra((p) => Math.max(0, p - 1))}
-                disabled={pasosExtra === 0}
-                aria-label={`Bajar oferta en ${formatCLP(PASO_OFERTA)}`}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-blue-200 text-lg font-bold text-blue-600 hover:bg-blue-50 disabled:opacity-30"
+                onClick={() => setMostrarFormulario(true)}
+                className="mt-4 w-full rounded-xl bg-blue-600 py-4 text-base font-bold text-white hover:bg-blue-700"
               >
-                −
+                Comprar puesto #1 por {formatCLP(montoElegido)}
               </button>
-              <p className="text-4xl font-black tracking-tight text-blue-700 sm:text-5xl">
-                {formatCLP(montoElegido)}
-              </p>
-              <button
-                onClick={() => setPasosExtra((p) => p + 1)}
-                aria-label={`Subir oferta en ${formatCLP(PASO_OFERTA)}`}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-blue-200 text-lg font-bold text-blue-600 hover:bg-blue-50"
-              >
-                +
-              </button>
+
+              <p className="mt-3 text-xs text-neutral-400">Pago seguro con MercadoPago</p>
             </div>
-            {pasosExtra > 0 && (
-              <p className="text-xs text-neutral-400">
-                {formatCLP(precioLocal)} mínimo + {formatCLP(pasosExtra * PASO_OFERTA)} de colchón
-              </p>
-            )}
-            <button
-              onClick={() => setMostrarFormulario(true)}
-              className="mt-4 w-full rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700"
-            >
-              Llévate el puesto #1 por {formatCLP(montoElegido)}
-            </button>
           </>
         )}
       </section>
 
       <section>
-        <h2 className="mb-3 text-lg font-bold text-neutral-900">Salón de la fama</h2>
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-neutral-900">Salón de la fama</h2>
+          <span className="text-sm text-neutral-500">
+            {estado.salonDeLaFama.length} {estado.salonDeLaFama.length === 1 ? "lugar" : "lugares"}
+          </span>
+        </div>
         {!estado.reyActual && estado.salonDeLaFama.length > 0 && (
-          <p className="mb-3 text-sm text-neutral-400">
+          <p className="mb-4 text-sm text-neutral-400">
             El trono está vacante por el momento — el anuncio del último pago fue ocultado por
             moderación.
           </p>
